@@ -73,12 +73,15 @@ namespace opana {
 
     /// Access to pedestal estimator algorithm
     PedEstimator& Algo() { return _algo; }
-    
+
+    /// Configure function
+    void Configure(float rise_edge=5., float fall_edge=5.);
     
   protected:
 
     PedEstimator _algo;
- 
+    float _rise_edge, _fall_edge;
+
   };
 }
 

@@ -16,6 +16,12 @@ namespace opana {
     
     return cl;
   }
+
+  void PulseFinder::Configure(float rise_edge, float fall_edge)
+  {
+    _rise_edge = rise_edge;
+    _fall_edge = fall_edge;
+  }
   
   const std::vector< opana::Pulse_t> PulseFinder::Reconstruct(const ::larlite::fifo& wf) const
   {
@@ -23,14 +29,11 @@ namespace opana {
     
     auto ped_rms = _algo.Calculate(wf,1);
     
-    Double_t rise_edge  = 3.0;
-    Double_t fall_edge  = 3.0;
-    
     bool found_pulse = false; 
     size_t t = 0;
     
     while (  t < wf.size() ) {
-      if(wf[t] > (ped_rms.first  + rise_edge * ped_rms.second) && !found_pulse)
+      if(wf[t] > (ped_rms.first  + _rise_edge * ped_rms.second) && !found_pulse)
 	found_pulse = true;
       
       if(found_pulse) {
@@ -43,7 +46,7 @@ namespace opana {
 	  if(t_end == wf.size() - 1)
 	    break;
 	  
-	  if(wf[t_end] <= (ped_rms.first + fall_edge * ped_rms.second))
+	  if(wf[t_end] <= (ped_rms.first + _fall_edge * ped_rms.second))
 	    break;
 	  else 
 	    ++t_end;
