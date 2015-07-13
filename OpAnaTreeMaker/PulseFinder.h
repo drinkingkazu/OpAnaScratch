@@ -21,7 +21,7 @@
 namespace opana {
 
   struct Pulse_t {
-    short ch;
+    short ch; //channel
     short tstart;
     short tend;
     short tmax;
@@ -34,6 +34,19 @@ namespace opana {
       tstart = tend = tmax = -1;
       ped_mean = -1;
       amp = area = -1;
+    }
+
+    void dump() {
+      std::cout  << "\n\t==start=="
+		 << "\n\tch:       " << ch
+		 << "\n\ttstart:   " << tstart
+		 << "\n\ttend:     " << tend
+		 << "\n\ttmax:     " << tmax
+		 << "\n\tped_mean: " << ped_mean
+		 << "\n\tamp:      " << amp
+		 << "\n\tarea:     " << area
+		 << "\n\t==end==\n";
+	
     }
   };
   /**
@@ -56,9 +69,14 @@ namespace opana {
     /// Access to pedestal estimator algorithm
     PedEstimator& Algo() { return _algo; }
     
+    //call calculate function that's it
+    
+    size_t find_peak(const::larlite::fifo& data, const size_t istart, const size_t iend) const;
+    
   protected:
 
     PedEstimator _algo;
+ 
   };
 }
 
