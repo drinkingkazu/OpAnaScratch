@@ -20,6 +20,10 @@ my_proc.set_ana_output_file("out.root");
 
 ana = fmwk.RawWFAna()
 ana.StoreWaveform()
+preco_algo = ana.Algo()
+ped_algo = preco_algo.Algo()
+
+ped_algo.Configure(10,0.5)
 
 my_proc.add_process(ana)
 
@@ -28,7 +32,7 @@ print  "Finished configuring ana_processor. Start event loop!"
 print
 
 # Let's run it.
-my_proc.run(0,10);
+my_proc.run();
 
 # done!
 print

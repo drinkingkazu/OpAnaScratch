@@ -29,17 +29,28 @@ namespace opana {
   public:
     
     /// Default constructor
-    PedEstimator(){}
+    PedEstimator();
     
     /// Default destructor
     ~PedEstimator(){}
 
     /// Pedestal Estimator
-    std::pair<float,float> Calculate(const std::vector<unsigned short>& wf, bool start, int window, float cutoff) const;
+    std::pair<float,float> Calculate(const std::vector<unsigned short>& wf, bool start) const;
 
-
-    const std::pair<float,float> getrms (const std::vector<unsigned short>& wf, int k, int m, int window) const;
+    /// Function to configure
+    void Configure(unsigned int window = 10,
+		   float cutoff = 0.5 );
     
+  protected:
+    
+    /// Internal function for computation
+    const std::pair<float,float> getrms (const std::vector<unsigned short>& wf, int k, int m) const;
+
+    /// Config parameter 1: # ADC samples to be used for computation
+    unsigned int _window;
+    /// Config parameter 2: cutoff value
+    float _cutoff;
+
     
   };
 }

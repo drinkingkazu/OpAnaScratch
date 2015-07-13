@@ -10,6 +10,13 @@ namespace opana {
     _cutoff = 0.5;
     _window = 10;
   }
+
+  void PedEstimator::Configure(unsigned int window,
+			       float cutoff )
+  {
+    _window = window;
+    _cutoff = cutoff;
+  }
   
   //takes vector, and window size, rms cutoff - if start = true then will start from beginning, false starts at end
   std::pair<float,float> PedEstimator::Calculate(const std::vector<unsigned short>& wf, bool start) const
