@@ -80,7 +80,7 @@ namespace opana {
   protected:
 
     PedEstimator _algo;
-    float _rise_edge, _fall_edge, _threhold;
+    float _rise_edge, _fall_edge, _threshold;
 
   };
 }
