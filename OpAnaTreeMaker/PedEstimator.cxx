@@ -5,9 +5,9 @@
 
 namespace opana {
 
-  float PedEstimator::Calculate(const std::vector<unsigned short>& wf) const
+  std::pair<float,float> PedEstimator::Calculate(const std::vector<unsigned short>& wf) const
   {
-    return 0.0;
+    return std::pair<float,float>(0,0);
   }
 
 }
