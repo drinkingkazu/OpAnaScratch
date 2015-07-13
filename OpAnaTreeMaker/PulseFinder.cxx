@@ -51,10 +51,10 @@ namespace opana {
 	
 	a.tend = t_end;
 	a.tmax = find_peak(wf, t, t_end);	
-	a.amp  = wf[a.tmax];
+	a.amp  = wf[a.tmax] - ped_rms.first;
 	
 	while(t < t_end) { //secretly increases t...
-	  a.area += wf[t];
+	  a.area += wf[t] - ped_rms.first;
 	  ++t;
 	}
 	
