@@ -40,13 +40,15 @@ namespace opana {
 	size_t t_end = t;
 
 	while(1) {
+	  if(t_end == wf.size() - 1)
+	    break;
+	  
 	  if(wf[t_end] <= (ped_rms.first + fall_edge * ped_rms.second))
 	    break;
 	  else 
 	    ++t_end;
 	}
 	
-	if(t_end == wf.size() - 1) t_end++;
 	a.tend = t_end;
 	a.tmax = find_peak(wf, t, t_end);	
 	a.amp  = wf[a.tmax];
