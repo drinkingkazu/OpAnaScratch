@@ -5,8 +5,14 @@
 
 namespace opana {
 
+  PedEstimator::PedEstimator()
+  {
+    _cutoff = 0.5;
+    _window = 10;
+  }
+  
   //takes vector, and window size, rms cutoff - if start = true then will start from beginning, false starts at end
-  std::pair<float,float> PedEstimator::Calculate(const std::vector<unsigned short>& wf, bool start, int window, float cutoff) const
+  std::pair<float,float> PedEstimator::Calculate(const std::vector<unsigned short>& wf, bool start) const
   {
     float mean = 0;
     float rms = 0;
@@ -19,14 +25,14 @@ namespace opana {
     bool below = false;
 
     //need minimum number to calculate
-    if (n >= window) {
+    if (n >= _window) {
       if (start == true){
-	while (below == false && k+window < n){
-	  std::cout << k+window << std::endl;
+	while (below == false && k+_window < n){
+	  //std::cout << k+_window << std::endl;
 	 
-	  rms = getrms(wf, k, k+window, window).second;
-	  mean = getrms(wf, k, k+window, window).first;
-	  if (rms < cutoff){
+	  rms = getrms(wf, k, k+_window).second;
+	  mean = getrms(wf, k, k+_window).first;
+	  if (rms < _cutoff){
 	    below = true;
 	  }
 	  k++;
@@ -35,10 +41,10 @@ namespace opana {
 
       else{
 	k = n-1;
-	while (below == false && k - window > 0){
-	  rms = getrms(wf, k-window, k, window).second;
-	  mean = getrms(wf, k-window, k, window).first;
-	  if (rms < cutoff){
+	while (below == false && k - _window > 0){
+	  rms = getrms(wf, k-_window, k).second;
+	  mean = getrms(wf, k-_window, k).first;
+	  if (rms < _cutoff){
 	    below = true;
 	  }
 	  k--;
@@ -47,24 +53,24 @@ namespace opana {
     }
    
     
-    //returns <mean, rms>, or 0,0 if nothing in vector or bad index or not below cutoff
+    //returns <mean, rms>, or 0,0 if nothing in vector or bad index or not below _cutoff
     return std::pair<float,float>(mean,rms);
   }
 
-  const std::pair<float,float> PedEstimator::getrms (const std::vector<unsigned short>& wf, int k, int m, int window) const{
+  const std::pair<float,float> PedEstimator::getrms (const std::vector<unsigned short>& wf, int k, int m) const{
     float mean = 0;
     float rms = 0;
     for (int i  = k; i < m; i++){
       mean += wf.at(i);
     }
 
-    mean = mean/window;
+    mean = mean/_window;
 
     for (int i= k; i < m; i++){
       float diff = wf.at(i)-mean;
       rms += diff*diff;
     }
-    rms = sqrt(rms/window);
+    rms = sqrt(rms/_window);
     return  std::pair<float,float>(mean,rms);
 }
 
