@@ -51,8 +51,10 @@ namespace opana {
 	a.tmax = find_peak(wf, t, t_end);	
 	a.amp  = wf[a.tmax];
 	
-	for(t ; t < t_end; ++t) //secretly increases t...
+	while(t < t_end) { //secretly increases t...
 	  a.area += wf[t];
+	  ++t;
+	}
 	
 	a.ch = wf.channel_number();
 	a.ped_mean = ped_rms.first; 

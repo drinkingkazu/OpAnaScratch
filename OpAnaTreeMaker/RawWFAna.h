@@ -28,7 +28,7 @@ namespace larlite {
   public:
 
     /// Default constructor
-    RawWFAna(){ _name="RawWFAna"; _fout=0;}
+    RawWFAna();
 
     /// Default destructor
     virtual ~RawWFAna(){}
@@ -48,7 +48,9 @@ namespace larlite {
     */
     virtual bool finalize();
 
-
+    /// Store waveform flag
+    void StoreWaveform(bool doit=true) { _store_wf = doit; }
+    
     /// Algorithm instance getter
     ::opana::PulseFinder& Algo() {return _algo; }
 
@@ -64,6 +66,12 @@ namespace larlite {
     
     /// Pulse TTree
     TTree* _pulse_tree;
+
+    bool _store_wf;
+    unsigned int _event;
+    unsigned short _ch, _frame, _sample;
+    std::vector<unsigned short> _wf;
+    ::opana::Pulse_t _pulse;
     
   };
 }
