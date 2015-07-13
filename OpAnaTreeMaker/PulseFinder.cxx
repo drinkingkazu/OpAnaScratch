@@ -62,7 +62,7 @@ namespace opana {
 	a.amp  = wf[a.tmax] - ped_info.first;
 	
 	while(t < t_end) { //secretly increases t...
-	  a.area += wf[t] - ped_info.first;
+	  if(wf[t] >= ped_info.first) a.area += wf[t] - ped_info.first;
 	  ++t;
 	}
 	
