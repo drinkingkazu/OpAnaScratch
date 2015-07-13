@@ -17,6 +17,7 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+#include <math.h> 
 namespace opana {
   /**
      \class PedEstimator
@@ -34,7 +35,11 @@ namespace opana {
     ~PedEstimator(){}
 
     /// Pedestal Estimator
-    std::pair<float,float> Calculate(const std::vector<unsigned short>& wf) const;
+    std::pair<float,float> Calculate(const std::vector<unsigned short>& wf, bool start, int window, float cutoff) const;
+
+
+    const std::pair<float,float> getrms (const std::vector<unsigned short>& wf, int k, int m, int window) const;
+    
     
   };
 }
