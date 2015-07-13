@@ -20,9 +20,11 @@ my_proc.set_ana_output_file("out.root");
 
 ana = fmwk.RawWFAna()
 ana.StoreWaveform()
-preco_algo = ana.Algo()
-ped_algo = preco_algo.Algo()
 
+preco_algo = ana.Algo()
+preco_algo.Configure(5.,5.,3.)
+
+ped_algo = preco_algo.Algo()
 ped_algo.Configure(10,0.5)
 
 my_proc.add_process(ana)
