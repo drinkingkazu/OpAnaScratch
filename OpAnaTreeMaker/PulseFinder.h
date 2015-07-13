@@ -65,13 +65,15 @@ namespace opana {
     ~PulseFinder(){}
 
     const std::vector< opana::Pulse_t> Reconstruct(const ::larlite::fifo& wf) const;
+    
+    
+    //Auxiliary
+    size_t find_peak(const ::larlite::fifo& data, const size_t istart, const size_t iend) const;
+    
 
     /// Access to pedestal estimator algorithm
     PedEstimator& Algo() { return _algo; }
     
-    //call calculate function that's it
-    
-    size_t find_peak(const::larlite::fifo& data, const size_t istart, const size_t iend) const;
     
   protected:
 

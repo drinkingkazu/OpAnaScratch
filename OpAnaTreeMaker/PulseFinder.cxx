@@ -21,7 +21,7 @@ namespace opana {
   {
     std::vector< opana::Pulse_t> result;
     
-    auto ped_rms = _algo.Calculate(wf);
+    auto ped_rms = _algo.Calculate(wf,1,5,0.5);
     
     Double_t rise_edge  = 3.0;
     Double_t fall_edge  = 3.0;
