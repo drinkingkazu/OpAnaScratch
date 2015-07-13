@@ -51,7 +51,13 @@ namespace opana {
     ~PulseFinder(){}
 
     const std::vector< opana::Pulse_t> Reconstruct(const ::larlite::fifo& wf) const;
+
+    /// Access to pedestal estimator algorithm
+    PedEstimator& Algo() { return _algo; }
     
+  protected:
+
+    PedEstimator _algo;
   };
 }
 
