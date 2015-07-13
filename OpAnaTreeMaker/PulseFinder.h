@@ -75,12 +75,12 @@ namespace opana {
     PedEstimator& Algo() { return _algo; }
 
     /// Configure function
-    void Configure(float rise_edge=5., float fall_edge=5.);
-    
+    void Configure(float rise_edge=5., float fall_edge=5., float threshold = 3.0);
+
   protected:
 
     PedEstimator _algo;
-    float _rise_edge, _fall_edge;
+    float _rise_edge, _fall_edge, _threhold;
 
   };
 }

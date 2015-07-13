@@ -17,23 +17,27 @@ namespace opana {
     return cl;
   }
 
-  void PulseFinder::Configure(float rise_edge, float fall_edge)
+  void PulseFinder::Configure(float rise_edge, float fall_edge, float threshold)
   {
     _rise_edge = rise_edge;
     _fall_edge = fall_edge;
+    _threshold = threshold;
   }
+
   
   const std::vector< opana::Pulse_t> PulseFinder::Reconstruct(const ::larlite::fifo& wf) const
   {
     std::vector< opana::Pulse_t> result;
     
-    auto ped_rms = _algo.Calculate(wf,1);
+    auto ped_info = _algo.Calculate(wf,1);
     
     bool found_pulse = false; 
     size_t t = 0;
     
     while (  t < wf.size() ) {
-      if(wf[t] > (ped_rms.first  + _rise_edge * ped_rms.second) && !found_pulse)
+      if(wf[t] > (ped_info.first  + _rise_edge * ped_info.second)  && 
+	 wf[t] > _threshold + ped_info.first &&
+	 !found_pulse)
 	found_pulse = true;
       
       if(found_pulse) {
@@ -46,7 +50,8 @@ namespace opana {
 	  if(t_end == wf.size() - 1)
 	    break;
 	  
-	  if(wf[t_end] <= (ped_rms.first + _fall_edge * ped_rms.second))
+	  if( wf[t_end] <= (ped_info.first + _fall_edge * ped_info.second) &&
+	      (wf[t_end] <= _threshold + ped_info.first))
 	    break;
 	  else 
 	    ++t_end;
@@ -54,15 +59,15 @@ namespace opana {
 	
 	a.tend = t_end;
 	a.tmax = find_peak(wf, t, t_end);	
-	a.amp  = wf[a.tmax] - ped_rms.first;
+	a.amp  = wf[a.tmax] - ped_info.first;
 	
 	while(t < t_end) { //secretly increases t...
-	  a.area += wf[t] - ped_rms.first;
+	  a.area += wf[t] - ped_info.first;
 	  ++t;
 	}
 	
 	a.ch = wf.channel_number();
-	a.ped_mean = ped_rms.first; 
+	a.ped_mean = ped_info.first; 
 	result.push_back(a);
       }
       
