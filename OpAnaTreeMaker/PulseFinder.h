@@ -21,7 +21,7 @@
 namespace opana {
 
   struct Pulse_t {
-
+    short ch;
     short tstart;
     short tend;
     short tmax;
@@ -30,6 +30,7 @@ namespace opana {
     float area;
 
     Pulse_t() {
+      ch = -1;
       tstart = tend = tmax = -1;
       ped_mean = -1;
       amp = area = -1;
