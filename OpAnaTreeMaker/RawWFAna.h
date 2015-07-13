@@ -17,7 +17,7 @@
 
 #include "Analysis/ana_base.h"
 #include "PulseFinder.h"
-
+#include <TTree.h>
 namespace larlite {
   /**
      \class RawWFAna
@@ -53,7 +53,18 @@ namespace larlite {
     ::opana::PulseFinder& Algo() {return _algo; }
 
   protected:
+    /// Optical reconstruction algorithm
     ::opana::PulseFinder _algo;
+
+    /// Raw Waveform ttree
+    TTree* _raw_wf_tree;
+
+    /// Pulse Waveform ttree
+    TTree* _pulse_wf_tree;
+    
+    /// Pulse TTree
+    TTree* _pulse_tree;
+    
   };
 }
 #endif
