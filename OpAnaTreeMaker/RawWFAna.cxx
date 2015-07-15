@@ -7,6 +7,7 @@ namespace larlite {
 
   RawWFAna::RawWFAna() : ana_base()
   {
+    _algo = nullptr;
     _name="RawWFAna";
     _fout=0;
     _pulse_tree = _raw_wf_tree = nullptr;
@@ -14,6 +15,9 @@ namespace larlite {
   
   bool RawWFAna::initialize() {
 
+    if(!_algo)
+      throw std::exception();
+    
     if(_store_wf){
       _raw_wf_tree = new TTree("raw_wf_tree","Raw Waveforms");
       _raw_wf_tree->Branch("event",&_event,"event/i");
@@ -60,7 +64,7 @@ namespace larlite {
 	_raw_wf_tree->Fill();
       }
       
-      auto pulse_v = _algo.Reconstruct(wf.channel_number(),wf);
+      auto pulse_v = _algo->Reconstruct(wf.channel_number(),wf);
       for(auto const& p : pulse_v) {
 	_pulse = p;
 	_pulse_tree->Fill();

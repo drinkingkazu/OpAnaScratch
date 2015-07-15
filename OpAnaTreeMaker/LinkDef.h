@@ -15,8 +15,10 @@
 #pragma link C++ class opana::PedEstimator+;
 #pragma link C++ class opana::PulseFinder+;
 //#pragma link C++ class opana::PulseFinderBase+;
+#pragma link C++ class opana::ThresWindow+;
 //ADD_NEW_CLASS ... do not change this line
 #endif
+
 
 
 

@@ -16,7 +16,7 @@
 #define LARLITE_RAWWFANA_H
 
 #include "Analysis/ana_base.h"
-#include "PulseFinder.h"
+#include "PulseFinderBase.h"
 #include <TTree.h>
 namespace larlite {
   /**
@@ -50,13 +50,13 @@ namespace larlite {
 
     /// Store waveform flag
     void StoreWaveform(bool doit=true) { _store_wf = doit; }
-    
-    /// Algorithm instance getter
-    ::opana::PulseFinder& Algo() {return _algo; }
+
+    /// Algorithm Setter
+    void SetAlgo(::opana::PulseFinderBase* algo) { _algo = algo; }
 
   protected:
     /// Optical reconstruction algorithm
-    ::opana::PulseFinder _algo;
+    ::opana::PulseFinderBase* _algo;
 
     /// Raw Waveform ttree
     TTree* _raw_wf_tree;
