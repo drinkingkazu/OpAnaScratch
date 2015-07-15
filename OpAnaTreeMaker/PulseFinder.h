@@ -16,45 +16,16 @@
 
 #include <iostream>
 #include <vector>
-#include "DataFormat/fifo.h"
 #include "PedEstimator.h"
+#include "PulseFinderBase.h"
 namespace opana {
 
-  struct Pulse_t {
-    short ch; //channel
-    short tstart;
-    short tend;
-    short tmax;
-    float ped_mean;
-    float amp;
-    float area;
-
-    Pulse_t() {
-      ch = -1;
-      tstart = tend = tmax = -1;
-      ped_mean = -1;
-      amp = area = -1;
-    }
-
-    void dump() {
-      std::cout  << "\n\t==start=="
-		 << "\n\tch:       " << ch
-		 << "\n\ttstart:   " << tstart
-		 << "\n\ttend:     " << tend
-		 << "\n\ttmax:     " << tmax
-		 << "\n\tped_mean: " << ped_mean
-		 << "\n\tamp:      " << amp
-		 << "\n\tarea:     " << area
-		 << "\n\t==end==\n";
-	
-    }
-  };
   /**
      \class PulseFinder
      User defined class PulseFinder ... these comments are used to generate
      doxygen documentation!
   */
-  class PulseFinder{
+  class PulseFinder : public PulseFinderBase {
     
   public:
     
@@ -64,11 +35,12 @@ namespace opana {
     /// Default destructor
     ~PulseFinder(){}
 
-    const std::vector< opana::Pulse_t> Reconstruct(const ::larlite::fifo& wf) const;
-    
+    const std::vector< opana::Pulse_t>
+    Reconstruct(const unsigned int ch,
+		const std::vector<unsigned short>& wf) const;
     
     //Auxiliary
-    size_t find_peak(const ::larlite::fifo& data, const size_t istart, const size_t iend) const;
+    size_t find_peak(const std::vector<unsigned short>& data, const size_t istart, const size_t iend) const;
     
 
     /// Access to pedestal estimator algorithm
@@ -80,6 +52,7 @@ namespace opana {
   protected:
 
     PedEstimator _algo;
+
     float _rise_edge, _fall_edge, _threshold;
 
   };

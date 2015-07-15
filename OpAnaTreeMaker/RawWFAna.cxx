@@ -2,7 +2,7 @@
 #define LARLITE_RAWWFANA_CXX
 
 #include "RawWFAna.h"
-
+#include "DataFormat/fifo.h"
 namespace larlite {
 
   RawWFAna::RawWFAna() : ana_base()
@@ -19,7 +19,7 @@ namespace larlite {
       _raw_wf_tree->Branch("event",&_event,"event/i");
       _raw_wf_tree->Branch("ch",&_ch,"ch/s");
       _raw_wf_tree->Branch("frame",&_frame,"frame/s");
-      _raw_wf_tree->Branch("sample",&_sample,"frame/s");
+      _raw_wf_tree->Branch("sample",&_sample,"sample/s");
       _raw_wf_tree->Branch("wf","std::vector<unsigned short>",&_wf);
     }
     
@@ -60,7 +60,7 @@ namespace larlite {
 	_raw_wf_tree->Fill();
       }
       
-      auto pulse_v = _algo.Reconstruct(wf);
+      auto pulse_v = _algo.Reconstruct(wf.channel_number(),wf);
       for(auto const& p : pulse_v) {
 	_pulse = p;
 	_pulse_tree->Fill();

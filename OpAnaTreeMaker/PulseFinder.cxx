@@ -5,7 +5,7 @@
 
 namespace opana {
   
-  size_t PulseFinder::find_peak(const::larlite::fifo& data, const size_t istart, const size_t iend) const
+  size_t PulseFinder::find_peak(const std::vector<unsigned short>& data, const size_t istart, const size_t iend) const
   {
     auto the_max = double{0.0};
     size_t cl = 4096;
@@ -25,7 +25,8 @@ namespace opana {
   }
 
   
-  const std::vector< opana::Pulse_t> PulseFinder::Reconstruct(const ::larlite::fifo& wf) const
+  const std::vector< opana::Pulse_t> PulseFinder::Reconstruct(const unsigned int ch,
+							      const std::vector<unsigned short>& wf) const
   {
     std::vector< opana::Pulse_t> result;
     
@@ -66,7 +67,7 @@ namespace opana {
 	  ++t;
 	}
 	
-	a.ch = wf.channel_number();
+	a.ch = ch;
 	a.ped_mean = ped_info.first; 
 	result.push_back(a);
       }
