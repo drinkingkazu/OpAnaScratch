@@ -8,7 +8,7 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 from larlite import larlite as fmwk
-
+from ROOT import opana
 my_proc = fmwk.ana_processor()
 
 for x in xrange(len(sys.argv)-1):
@@ -19,13 +19,15 @@ my_proc.set_io_mode(fmwk.storage_manager.kREAD)
 my_proc.set_ana_output_file("out.root");
 
 ana = fmwk.RawWFAna()
-ana.StoreWaveform()
+ana.StoreWaveform(True)
 
-preco_algo = ana.Algo()
+preco_algo = opana.PulseFinder()
 preco_algo.Configure(5.,5.,3.)
 
 ped_algo = preco_algo.Algo()
 ped_algo.Configure(10,0.5)
+
+ana.SetAlgo(preco_algo)
 
 my_proc.add_process(ana)
 

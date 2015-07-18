@@ -69,7 +69,7 @@ namespace larlite {
 
     bool _store_wf;
     unsigned int _event;
-    unsigned short _ch, _frame, _sample;
+    unsigned short _slot,_ch, _frame, _sample;
     std::vector<unsigned short> _wf;
     ::opana::Pulse_t _pulse;
     

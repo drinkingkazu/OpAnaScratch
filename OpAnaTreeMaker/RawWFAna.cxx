@@ -21,6 +21,7 @@ namespace larlite {
     if(_store_wf){
       _raw_wf_tree = new TTree("raw_wf_tree","Raw Waveforms");
       _raw_wf_tree->Branch("event",&_event,"event/i");
+      _raw_wf_tree->Branch("slot",&_slot,"slot/s");
       _raw_wf_tree->Branch("ch",&_ch,"ch/s");
       _raw_wf_tree->Branch("frame",&_frame,"frame/s");
       _raw_wf_tree->Branch("sample",&_sample,"sample/s");
@@ -48,10 +49,13 @@ namespace larlite {
     auto ev_fifo = storage->get_data<event_fifo>("pmt_xmit");
 
     // Return if no wf available
-    if(!ev_fifo || ev_fifo->empty()) return true;
+    if(!ev_fifo || ev_fifo->empty()) {
+      std::cout<<"nothing fuck uyou " <<std::endl;
+      return true;
+    }
 
     _event = ev_fifo->event_number();
-
+    _slot = ev_fifo->module_address();
     for(auto const& wf : *ev_fifo) {
 
       _ch = wf.channel_number();
