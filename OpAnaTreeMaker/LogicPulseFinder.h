@@ -21,6 +21,7 @@
 //local for Pulse_t struct
 #include "PulseFinderBase.h"
 
+#include "PedEstimator.h"
 //larlite
 #include "DataFormat/fifo.h"
 
@@ -47,11 +48,22 @@ namespace opana {
 		     float height       = 100,  //min logic pulse height
 		     UInt_t channel_num = 41);  //what channel we on?
   
+    void dump() {
+      std::cout << "\n\t == LogicPulseFinder == "
+		<< "\tbaseline... " << _baseline
+		<< "\theight....  " << _height
+		<< "\tchannel...  " << _channel_num
+		<< "\n\t == End == \n";
+    }
+    
+    PedEstimator& Algo() { return _algo; }
     
   private:
-
-    float _baseline;
-    float _height;
+    PedEstimator _algo;
+    
+    
+    float  _baseline;
+    float  _height;
     UInt_t _channel_num;
     
   };

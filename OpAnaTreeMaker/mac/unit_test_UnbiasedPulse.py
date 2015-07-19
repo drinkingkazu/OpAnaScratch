@@ -105,7 +105,12 @@ evfifo2.push_back(wf_25)
 #     	   bool   edge_flag    = false);
 
 ub.Configure(chans,6)
+ub.Algo().Configure()
+
 lol = ub.Reconstruct(logic_pulses,evfifo2)
+
+#    void Configure(unsigned int window = 10,
+#    float cutoff = 0.5 );
 
 c2 = TCanvas()
 h3 = TH1D("h3","",wf_0.size(),0,wf_0.size()-1)

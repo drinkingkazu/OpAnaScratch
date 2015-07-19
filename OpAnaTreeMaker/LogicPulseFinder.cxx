@@ -23,8 +23,21 @@ namespace opana {
     auto t = short{0};
     
     for(const auto& wf : evfifo) {
-      if(wf.channel_number() != _channel_num) continue;
+      UInt_t channel_number = (UInt_t)wf.channel_number();
+      UInt_t module_address = (UInt_t)wf.module_address();
+      if( channel_number != _channel_num)
+	continue;
+      if( module_address != 6)
+	continue;
+      
       t = 0;
+      
+      // std::cout << "not continue...\n";
+      //std::cout << channel_number << " " << module_address << "\n";
+
+      auto baseline = _algo.Calculate(wf,1).first;
+      _baseline = baseline;
+
       while( t < wf.size() ) {
 	if( wf[t] > _baseline + _height && !found_ttl)
 	  found_ttl = true;
@@ -44,9 +57,10 @@ namespace opana {
 	    ++t_end;
 	  }
 	  
+	  ttl.ped_mean = _baseline;
 	  ttl.tend  = t_end;
 	  ttl.amp   = wf[ttl.tstart + (size_t)((ttl.tend - ttl.tend)/2.0)] - _baseline;
-	  ttl.ch    = wf.channel_number();
+	  ttl.ch    = channel_number;
 	  ttl.width = ttl.tend - ttl.tstart;
 	  flasher_list.push_back(ttl);
 	  t = t_end + 1;

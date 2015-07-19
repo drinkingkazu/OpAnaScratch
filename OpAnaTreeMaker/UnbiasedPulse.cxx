@@ -6,8 +6,8 @@
 namespace opana {
   
   void UnbiasedPulse::Configure(std::vector<UInt_t> channels,
+				std::vector<UInt_t> fems,
 				UInt_t delay,
-				UInt_t baseline_num,
 				UInt_t window_size,
                                 UInt_t left_offset,
 				UInt_t right_offset,
@@ -20,12 +20,13 @@ namespace opana {
     _right_offset = right_offset; 
     _tstart       = tstart;
     _tend         = tend;
-    _baseline_num = baseline_num;
+    //_baseline_num = baseline_num;
     _window_size  = window_size;
     _edge_flag    = edge_flag;
     
     //need to configure with fhicllite!!!!
     _channels = channels;
+    _fems     = fems;
     
   }
   
@@ -34,13 +35,17 @@ namespace opana {
   {
     std::vector<Pulse_t> pulses;
     
-    for(const auto& flash : flashes) 
-      for(const auto& wf : evfifo)
-     	if(connected_channel(wf.channel_number()))
-     	  pulses.push_back(create_unbiased_pulse(wf,flash.tstart,flash.tend));
-    
-    
-    
+    for(const auto& flash : flashes) {
+      for(const auto& wf : evfifo) {
+	UInt_t ch_num  = (UInt_t)wf.channel_number();
+	UInt_t fem_num = (UInt_t)wf.module_address();
+     	if(connected_channel(ch_num) && connected_fem(fem_num)) {
+	    pulses.push_back(create_unbiased_pulse(wf,flash.tstart,flash.tend));
+	  }
+	
+      }
+    }
+  
     return pulses;  
   }
   
@@ -73,26 +78,28 @@ namespace opana {
     t_start += _delay;
     t_end   += _delay;
 
-    if(t_end > wf.size()) t_end -= _delay;
+    if(t_end >= wf.size()) t_end -= _delay;
     
     t_start -= _left_offset;    
     t_end   += _right_offset;
 
-    if(t_start < 0)         t_start += _left_offset;
-    if(t_end   > wf.size()) t_end   -= _right_offset;
+    if(t_start < 0)          t_start += _left_offset;
+    if(t_end   >= wf.size()) t_end   -= _right_offset;
 
-    auto baseline        = float{0.0};
-    Int_t baseline_start = t_start - _baseline_num;
-    Int_t baseline_end   = t_start;
+    // auto baseline        = float{0.0};
+    // Int_t baseline_start = t_start - _baseline_num;
+    // Int_t baseline_end   = t_start;
 
-    if(baseline_start < 0) {
-      baseline_start = t_end + 1;
-      baseline_end   = baseline_start + _baseline_num;  
-    }
+    // if(baseline_start < 0) {
+    //   baseline_start = t_end + 1;
+    //   baseline_end   = baseline_start + _baseline_num;  
+    // }
 
-    for(unsigned short t = baseline_start; t < baseline_end; ++t)
-      baseline += wf[t];
-    baseline /= _baseline_num;
+    // for(unsigned short t = baseline_start; t < baseline_end; ++t)
+    //   baseline += wf[t];
+    // baseline /= _baseline_num;
+
+    auto baseline = _algo.Calculate(wf,1).first;
 
     p.ch       = wf.channel_number();
     p.tmax     = find_peak(wf, t_start, t_end);	
@@ -103,7 +110,7 @@ namespace opana {
     
     auto area = float{0.0};    
     for(unsigned short t = t_start; t <= t_end; ++t)
-      if(wf[t] > baseline) area += wf[t];
+      if(wf[t] > baseline) area += wf[t] - baseline;
         
     p.area = area;
     return p; 
