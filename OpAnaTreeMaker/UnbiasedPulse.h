@@ -79,7 +79,12 @@ namespace opana {
     
     Pulse_t create_unbiased_pulse(const ::larlite::fifo& wf,
 				  Int_t t_start = -1, 
-				  Int_t t_end = -1);
+				  Int_t t_end   = -1);
+    
+    bool check_for_mod(const ::larlite::event_fifo& evfifo,
+		       UInt_t channel,
+		       UInt_t fem,
+		       UInt_t peak);
     
     UInt_t _delay;
     UInt_t _left_offset;
