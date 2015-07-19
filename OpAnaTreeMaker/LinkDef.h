@@ -16,8 +16,12 @@
 #pragma link C++ class opana::PulseFinder+;
 //#pragma link C++ class opana::PulseFinderBase+;
 #pragma link C++ class opana::ThresWindow+;
+//#pragma link C++ class larlite::FindChannel+;
+#pragma link C++ class opana::LogicPulseFinder+;
+#pragma link C++ class opana::UnbiasedPulse+;
 //ADD_NEW_CLASS ... do not change this line
 #endif
+
 
 
 
