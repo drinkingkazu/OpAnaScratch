@@ -54,6 +54,9 @@ namespace larlite {
     /// Algorithm Setter
     void SetAlgo(::opana::PulseFinderBase* algo) { _algo = algo; }
 
+    /// Target ch to calculate dt
+    void TargetCh(int ch) { _target_ch = ch; }
+
   protected:
     /// Optical reconstruction algorithm
     ::opana::PulseFinderBase* _algo;
@@ -70,6 +73,9 @@ namespace larlite {
     bool _store_wf;
     unsigned int _event;
     unsigned short _slot,_ch, _frame, _sample;
+    double _ts;
+    double _dt;
+    int _target_ch;
     std::vector<unsigned short> _wf;
     ::opana::Pulse_t _pulse;
     

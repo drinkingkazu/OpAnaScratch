@@ -11,12 +11,11 @@ from larlite import larlite as fmwk
 from ROOT import opana
 my_proc = fmwk.ana_processor()
 
-for x in xrange(len(sys.argv)-1):
-    my_proc.add_input_file(sys.argv[x+1])
+my_proc.add_input_file(sys.argv[1])
 
 my_proc.set_io_mode(fmwk.storage_manager.kREAD)
 
-my_proc.set_ana_output_file("out.root");
+my_proc.set_ana_output_file("wf_%s" % sys.argv[1])
 
 ana = fmwk.RawWFAna()
 ana.StoreWaveform(True)
@@ -28,6 +27,8 @@ ped_algo = preco_algo.Algo()
 ped_algo.Configure(10,0.5)
 
 ana.SetAlgo(preco_algo)
+
+ana.TargetCh(37)
 
 my_proc.add_process(ana)
 
